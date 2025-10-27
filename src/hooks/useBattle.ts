@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useToast } from '@chakra-ui/react';
 import { apiClient } from '../api/client';
 import { ENDPOINTS } from '../api/endpoints';
-import { BattleResult } from '../types/battle';
+import type { BattleResult } from '../types/battle';
 
 /**
  * Hook para executar batalha entre dois pokémons

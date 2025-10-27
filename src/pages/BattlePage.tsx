@@ -19,7 +19,7 @@ import { useState } from 'react';
 import { usePokemons } from '../hooks/usePokemons';
 import { useBattle } from '../hooks/useBattle';
 import { getPokemonImage, calculateWinProbability } from '../utils/pokemonHelpers';
-import { BattleResult } from '../types/battle';
+import type { BattleResult } from '../types/battle';
 
 export const BattlePage = () => {
   const navigate = useNavigate();

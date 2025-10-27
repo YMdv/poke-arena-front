@@ -1,5 +1,4 @@
 import {
-  Box,
   Container,
   Heading,
   Button,
@@ -34,7 +33,7 @@ import {
   useCreatePokemon,
   useDeletePokemon,
 } from '../hooks/usePokemonMutations';
-import { PokemonTipo } from '../types/pokemon';
+import type { PokemonTipo } from '../types/pokemon';
 import { getPokemonImage, getPokemonName } from '../utils/pokemonHelpers';
 
 export const PokemonListPage = () => {

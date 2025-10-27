@@ -21,7 +21,7 @@ export const Home = () => {
   const bgColor = useColorModeValue('white', 'gray.800');
   const borderColor = useColorModeValue('gray.200', 'gray.700');
 
-  const activePok emons = pokemons?.filter((p) => p.active) || [];
+  const activePokemons = pokemons?.filter((p) => p.active) || [];
 
   return (
     <Container maxW="container.xl" py={10}>

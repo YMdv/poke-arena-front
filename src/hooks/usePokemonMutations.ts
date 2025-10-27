@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useToast } from '@chakra-ui/react';
 import { apiClient } from '../api/client';
 import { ENDPOINTS } from '../api/endpoints';
-import { CreatePokemonDTO, UpdatePokemonDTO } from '../types/pokemon';
+import type { CreatePokemonDTO, UpdatePokemonDTO } from '../types/pokemon';
 
 /**
  * Hook para criar pokémon

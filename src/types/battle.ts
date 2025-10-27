@@ -4,7 +4,7 @@
  * Interfaces e tipos relacionados às batalhas
  */
 
-import { Pokemon } from './pokemon';
+import type { Pokemon } from './pokemon';
 
 // Interface do resultado da batalha
 export interface BattleResult {
@@ -22,7 +22,7 @@ export interface BattleRequest {
 export interface BattleStats {
   probabilidadeA: number;
   probabilidadeB: number;
-  nivelInicial A: number;
+  nivelInicialA: number;
   nivelInicialB: number;
   nivelFinalA: number;
   nivelFinalB: number;

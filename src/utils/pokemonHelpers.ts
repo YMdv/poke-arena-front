@@ -4,7 +4,8 @@
  * Funções auxiliares para trabalhar com Pokémons
  */
 
-import { PokemonTipo, POKEMON_METADATA } from '../types/pokemon';
+import type { PokemonTipo } from '../types/pokemon';
+import { POKEMON_METADATA } from '../types/pokemon';
 
 /**
  * Retorna o caminho da imagem do pokémon

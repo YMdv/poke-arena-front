@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '../api/client';
 import { ENDPOINTS } from '../api/endpoints';
-import { Pokemon } from '../types/pokemon';
+import type { Pokemon } from '../types/pokemon';
 
 /**
  * Hook para buscar lista de todos os pokémons

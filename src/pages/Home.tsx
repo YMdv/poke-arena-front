@@ -24,8 +24,9 @@ export const Home = () => {
   const activePokemons = pokemons?.filter((p) => p.active) || [];
 
   return (
-    <Container maxW="container.xl" py={10}>
-      <VStack spacing={8} align="stretch">
+    <Box minH="100vh" display="flex" alignItems="center" justifyContent="center">
+      <Container maxW="container.xl" py={10}>
+        <VStack spacing={8} align="stretch">
         <Box textAlign="center">
           <Heading size="2xl" mb={4}>
             🎮 PokéArena
@@ -95,7 +96,8 @@ export const Home = () => {
             </VStack>
           </Button>
         </SimpleGrid>
-      </VStack>
-    </Container>
+        </VStack>
+      </Container>
+    </Box>
   );
 };

@@ -92,6 +92,8 @@ export const BattlePage = () => {
                   <Image
                     src={getPokemonImage(result.vencedor.tipo)}
                     boxSize="200px"
+                    objectFit="contain"
+                    mx="auto"
                   />
                   <Text fontSize="xl">{result.vencedor.tipo.toUpperCase()}</Text>
                   <Text>Treinador: {result.vencedor.treinador}</Text>
@@ -109,6 +111,8 @@ export const BattlePage = () => {
                   <Image
                     src={getPokemonImage(result.perdedor.tipo)}
                     boxSize="200px"
+                    objectFit="contain"
+                    mx="auto"
                     opacity={0.5}
                   />
                   <Text fontSize="xl">{result.perdedor.tipo.toUpperCase()}</Text>
@@ -170,6 +174,8 @@ export const BattlePage = () => {
                       <Image
                         src={getPokemonImage(pokemonA.tipo)}
                         boxSize="150px"
+                        objectFit="contain"
+                        mx="auto"
                       />
                       <Text>{pokemonA.tipo.toUpperCase()}</Text>
                       <Text>Nível: {pokemonA.nivel}</Text>
@@ -208,6 +214,8 @@ export const BattlePage = () => {
                       <Image
                         src={getPokemonImage(pokemonB.tipo)}
                         boxSize="150px"
+                        objectFit="contain"
+                        mx="auto"
                       />
                       <Text>{pokemonB.tipo.toUpperCase()}</Text>
                       <Text>Nível: {pokemonB.nivel}</Text>

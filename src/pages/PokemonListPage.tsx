@@ -98,6 +98,7 @@ export const PokemonListPage = () => {
                   alt={pokemon.tipo}
                   boxSize="150px"
                   objectFit="contain"
+                  mx="auto"
                 />
                 <Heading size="md">{getPokemonName(pokemon.tipo)}</Heading>
                 <Text>Treinador: {pokemon.treinador}</Text>

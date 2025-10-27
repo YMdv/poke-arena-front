@@ -1,11 +1,12 @@
-import { Container, Heading, Text, Button, VStack } from '@chakra-ui/react';
+import { Box, Container, Heading, Text, Button, VStack } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 
 export const NotFound = () => {
   const navigate = useNavigate();
 
   return (
-    <Container maxW="container.md" py={20} textAlign="center">
+    <Box minH="100vh" display="flex" alignItems="center" justifyContent="center">
+      <Container maxW="container.md" py={20} textAlign="center">
       <VStack spacing={6}>
         <Text fontSize="9xl">404</Text>
         <Heading>Página Não Encontrada</Heading>
@@ -16,6 +17,7 @@ export const NotFound = () => {
           Voltar para Home
         </Button>
       </VStack>
-    </Container>
+      </Container>
+    </Box>
   );
 };

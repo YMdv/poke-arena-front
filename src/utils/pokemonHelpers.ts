@@ -59,10 +59,3 @@ export function calculateWinProbability(nivelA: number, nivelB: number): {
 export function formatLevel(nivel: number): string {
   return `Nível ${nivel}`;
 }
-
-/**
- * Verifica se o pokémon está ativo
- */
-export function isPokemonActive(active: boolean): string {
-  return active ? 'Ativo' : 'Inativo';
-}

@@ -46,7 +46,7 @@ export const useUpdatePokemon = () => {
   const toast = useToast();
 
   return useMutation({
-    mutationFn: async ({ id, data }: { id: string; data: UpdatePokemonDTO }) => {
+    mutationFn: async ({ id, data }: { id: number; data: UpdatePokemonDTO }) => {
       const response = await apiClient.put(ENDPOINTS.POKEMON_BY_ID(id), data);
       return response.data;
     },
@@ -80,7 +80,7 @@ export const useDeletePokemon = () => {
   const toast = useToast();
 
   return useMutation({
-    mutationFn: async (id: string) => {
+    mutationFn: async (id: number) => {
       await apiClient.delete(ENDPOINTS.POKEMON_BY_ID(id));
     },
     onSuccess: () => {

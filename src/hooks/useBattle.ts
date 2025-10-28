@@ -16,8 +16,8 @@ export const useBattle = () => {
       pokemonAId,
       pokemonBId,
     }: {
-      pokemonAId: string;
-      pokemonBId: string;
+      pokemonAId: number;
+      pokemonBId: number;
     }): Promise<BattleResult> => {
       const { data } = await apiClient.post(
         ENDPOINTS.BATTLE(pokemonAId, pokemonBId)

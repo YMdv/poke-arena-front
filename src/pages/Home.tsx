@@ -21,8 +21,6 @@ export const Home = () => {
   const bgColor = useColorModeValue('white', 'gray.800');
   const borderColor = useColorModeValue('gray.200', 'gray.700');
 
-  const activePokemons = pokemons?.filter((p) => p.active) || [];
-
   return (
     <Box minH="100vh" display="flex" alignItems="center" justifyContent="center">
       <Container maxW="container.xl" py={10}>
@@ -36,18 +34,7 @@ export const Home = () => {
           </Text>
         </Box>
 
-        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6}>
-          <Stat
-            p={6}
-            bg={bgColor}
-            borderWidth="1px"
-            borderColor={borderColor}
-            borderRadius="lg"
-          >
-            <StatLabel>Pokémons Ativos</StatLabel>
-            <StatNumber>{isLoading ? '...' : activePokemons.length}</StatNumber>
-          </Stat>
-
+        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
           <Stat
             p={6}
             bg={bgColor}
@@ -66,7 +53,7 @@ export const Home = () => {
             borderColor={borderColor}
             borderRadius="lg"
           >
-            <StatLabel>Status</StatLabel>
+            <StatLabel>Status da API</StatLabel>
             <StatNumber fontSize="xl">✅ Online</StatNumber>
           </Stat>
         </SimpleGrid>

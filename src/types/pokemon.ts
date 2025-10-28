@@ -9,14 +9,12 @@
 export type PokemonTipo = 'charizard' | 'mewtwo' | 'pikachu';
 
 // Interface principal do Pokémon
+// Conformidade com especificação Jazida - apenas 4 campos
 export interface Pokemon {
-  id: string;
+  id: number;
   tipo: PokemonTipo;
   treinador: string;
   nivel: number;
-  active: boolean;
-  created_at?: string;
-  updated_at?: string;
 }
 
 // DTO para criar Pokémon

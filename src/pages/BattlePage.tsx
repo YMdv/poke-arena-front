@@ -26,14 +26,12 @@ export const BattlePage = () => {
   const { data: pokemons, isLoading } = usePokemons();
   const battle = useBattle();
 
-  const [pokemonAId, setPokemonAId] = useState('');
-  const [pokemonBId, setPokemonBId] = useState('');
+  const [pokemonAId, setPokemonAId] = useState<number | ''>('');
+  const [pokemonBId, setPokemonBId] = useState<number | ''>('');
   const [result, setResult] = useState<BattleResult | null>(null);
 
-  const activePokemons = pokemons?.filter((p) => p.active) || [];
-
-  const pokemonA = activePokemons.find((p) => p.id === pokemonAId);
-  const pokemonB = activePokemons.find((p) => p.id === pokemonBId);
+  const pokemonA = pokemons?.find((p) => p.id === pokemonAId);
+  const pokemonB = pokemons?.find((p) => p.id === pokemonBId);
 
   const handleBattle = () => {
     if (!pokemonAId || !pokemonBId) return;
@@ -62,12 +60,12 @@ export const BattlePage = () => {
     );
   }
 
-  if (activePokemons.length < 2) {
+  if (!pokemons || pokemons.length < 2) {
     return (
       <Container maxW="container.xl" py={10}>
         <Alert status="warning">
           <AlertIcon />
-          Você precisa de pelo menos 2 pokémons ativos para batalhar!
+          Você precisa de pelo menos 2 pokémons para batalhar!
         </Alert>
         <Button mt={4} onClick={() => navigate('/pokemons')}>
           Criar Pokémons
@@ -159,9 +157,9 @@ export const BattlePage = () => {
               <Select
                 placeholder="Selecione o Pokémon A"
                 value={pokemonAId}
-                onChange={(e) => setPokemonAId(e.target.value)}
+                onChange={(e) => setPokemonAId(Number(e.target.value))}
               >
-                {activePokemons.map((p) => (
+                {pokemons.map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.tipo.toUpperCase()} - {p.treinador} (Nível {p.nivel})
                   </option>
@@ -199,9 +197,9 @@ export const BattlePage = () => {
               <Select
                 placeholder="Selecione o Pokémon B"
                 value={pokemonBId}
-                onChange={(e) => setPokemonBId(e.target.value)}
+                onChange={(e) => setPokemonBId(Number(e.target.value))}
               >
-                {activePokemons.map((p) => (
+                {pokemons.map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.tipo.toUpperCase()} - {p.treinador} (Nível {p.nivel})
                   </option>

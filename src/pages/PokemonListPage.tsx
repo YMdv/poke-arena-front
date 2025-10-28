@@ -7,7 +7,6 @@ import {
   CardBody,
   Image,
   Text,
-  Badge,
   VStack,
   HStack,
   useDisclosure,
@@ -103,9 +102,6 @@ export const PokemonListPage = () => {
                 <Heading size="md">{getPokemonName(pokemon.tipo)}</Heading>
                 <Text>Treinador: {pokemon.treinador}</Text>
                 <Text>Nível: {pokemon.nivel}</Text>
-                <Badge colorScheme={pokemon.active ? 'green' : 'red'}>
-                  {pokemon.active ? 'Ativo' : 'Inativo'}
-                </Badge>
                 <Button
                   size="sm"
                   colorScheme="red"

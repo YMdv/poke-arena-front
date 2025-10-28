@@ -10,16 +10,38 @@ import {
   StatLabel,
   StatNumber,
   useColorModeValue,
+  Spinner,
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { usePokemons } from '../hooks/usePokemons';
+import { useHealth } from '../hooks/useHealth';
 
 export const Home = () => {
   const navigate = useNavigate();
   const { data: pokemons, isLoading } = usePokemons();
+  const { data: health, isLoading: isLoadingHealth, isError: isHealthError } = useHealth();
 
   const bgColor = useColorModeValue('white', 'gray.800');
   const borderColor = useColorModeValue('gray.200', 'gray.700');
+
+  // Determina o status visual da API
+  const getApiStatus = () => {
+    if (isLoadingHealth) {
+      return { icon: <Spinner size="sm" />, text: 'Verificando...', color: 'gray.500' };
+    }
+    if (isHealthError) {
+      return { icon: '🔴', text: 'Offline', color: 'red.500' };
+    }
+    if (health?.status === 'ok') {
+      return { icon: '✅', text: 'Online', color: 'green.500' };
+    }
+    if (health?.status === 'error') {
+      return { icon: '🟡', text: 'Degradado', color: 'yellow.500' };
+    }
+    return { icon: '⚪', text: 'Desconhecido', color: 'gray.500' };
+  };
+
+  const apiStatus = getApiStatus();
 
   return (
     <Box minH="100vh" display="flex" alignItems="center" justifyContent="center">
@@ -54,7 +76,9 @@ export const Home = () => {
             borderRadius="lg"
           >
             <StatLabel>Status da API</StatLabel>
-            <StatNumber fontSize="xl">✅ Online</StatNumber>
+            <StatNumber fontSize="xl" color={apiStatus.color}>
+              {apiStatus.icon} {apiStatus.text}
+            </StatNumber>
           </Stat>
         </SimpleGrid>
 

@@ -37,7 +37,7 @@ services:
 
     # Publish Directory: pasta onde ficam os arquivos buildados
     # O Vite gera os arquivos compilados na pasta "dist/"
-    publishDir: dist
+    staticPublishPath: dist
 
     # Auto-deploy: deploy automático quando há push na branch principal
     autoDeploy: true
@@ -68,80 +68,35 @@ services:
     # =========================================
     # 🛣️ Routes - SPA Routing Support
     # =========================================
-    # Como o projeto usa React Router, precisamos garantir que
-    # TODAS as rotas (ex: /battle, /pokemon/123) sejam tratadas
-    # pelo React Router e não pelo servidor.
+    # IMPORTANTE: Routes e Headers devem ser configurados manualmente
+    # no dashboard da Render após o primeiro deploy, pois o Blueprint
+    # tem limitações para Static Sites.
     #
-    # Sem essa configuração:
-    #   ❌ /battle → 404 Not Found (servidor procura arquivo battle.html)
+    # Configure no Dashboard:
+    # 1. Settings → Redirects/Rewrites
+    #    Source: /*
+    #    Destination: /index.html
+    #    Action: Rewrite
     #
-    # Com essa configuração:
-    #   ✅ /battle → index.html → React Router carrega a rota
+    # 2. Settings → Headers
+    #    Adicione os headers de segurança conforme necessário
 
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
+    # Configuração de routes (se suportado pelo Blueprint)
+    # routes:
+    #   - type: rewrite
+    #     source: /*
+    #     destination: /index.html
 
-    # =========================================
-    # 🔒 Headers - Segurança e Performance
-    # =========================================
-
-    headers:
-      # ---------------------------------------
-      # Segurança
-      # ---------------------------------------
-
-      # X-Frame-Options: previne clickjacking
-      # DENY: não permite que o site seja embedado em iframes
-      - path: /*
-        name: X-Frame-Options
-        value: DENY
-
-      # X-Content-Type-Options: previne MIME sniffing
-      # nosniff: força o browser a respeitar o Content-Type declarado
-      - path: /*
-        name: X-Content-Type-Options
-        value: nosniff
-
-      # X-XSS-Protection: proteção adicional contra XSS
-      # 1; mode=block: ativa proteção e bloqueia páginas suspeitas
-      - path: /*
-        name: X-XSS-Protection
-        value: 1; mode=block
-
-      # Referrer-Policy: controla informações de referrer
-      # strict-origin-when-cross-origin: envia referrer apenas para HTTPS
-      - path: /*
-        name: Referrer-Policy
-        value: strict-origin-when-cross-origin
-
-      # Permissions-Policy: desabilita recursos desnecessários
-      # Camera, microphone, geolocation desabilitados por padrão
-      - path: /*
-        name: Permissions-Policy
-        value: camera=(), microphone=(), geolocation=()
-
-      # ---------------------------------------
-      # Performance e Cache
-      # ---------------------------------------
-
-      # Cache agressivo para assets estáticos (JS, CSS, images)
-      # Os assets do Vite incluem hash no nome (ex: main.abc123.js)
-      # Isso significa que são immutable - podem ser cacheados forever
-      - path: /assets/*
-        name: Cache-Control
-        value: public, max-age=31536000, immutable
-
-      # Cache para index.html (sempre revalidar para pegar novas versões)
-      - path: /index.html
-        name: Cache-Control
-        value: no-cache, no-store, must-revalidate
-
-      # Compressão gzip/brotli (Render faz automaticamente, mas é bom explicitar)
-      - path: /*
-        name: Content-Encoding
-        value: gzip
+    # Configuração de headers (comentado - configure no dashboard)
+    # Headers devem ser configurados manualmente no dashboard após o deploy
+    #
+    # Exemplos de headers recomendados:
+    # - X-Frame-Options: DENY
+    # - X-Content-Type-Options: nosniff
+    # - X-XSS-Protection: 1; mode=block
+    # - Referrer-Policy: strict-origin-when-cross-origin
+    # - Cache-Control para /assets/*: public, max-age=31536000, immutable
+    # - Cache-Control para /index.html: no-cache, no-store, must-revalidate
 
 # =========================================
 # 📝 Notas Importantes

@@ -9,7 +9,7 @@ services:
   # 🌐 Static Site (Frontend SPA)
   # =========================================
   - type: web
-    name: poke-arena
+    name: poke-arena-app
     env: static  # Static Site - serve apenas arquivos estáticos via CDN global
 
     # Branch principal para auto-deploy

@@ -31,8 +31,9 @@ import { usePokemons } from '../hooks/usePokemons';
 import {
   useCreatePokemon,
   useDeletePokemon,
+  useUpdatePokemon,
 } from '../hooks/usePokemonMutations';
-import type { PokemonTipo } from '../types/pokemon';
+import type { Pokemon, PokemonTipo } from '../types/pokemon';
 import { getPokemonImage, getPokemonName } from '../utils/pokemonHelpers';
 
 export const PokemonListPage = () => {
@@ -40,20 +41,50 @@ export const PokemonListPage = () => {
   const { data: pokemons, isLoading, error } = usePokemons();
   const createPokemon = useCreatePokemon();
   const deletePokemon = useDeletePokemon();
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const updatePokemon = useUpdatePokemon();
+
+  const { isOpen: isCreateOpen, onOpen: onCreateOpen, onClose: onCreateClose } = useDisclosure();
+  const { isOpen: isEditOpen, onOpen: onEditOpen, onClose: onEditClose } = useDisclosure();
 
   const [newPokemon, setNewPokemon] = useState({
     tipo: 'pikachu' as PokemonTipo,
     treinador: '',
   });
 
+  const [editingPokemon, setEditingPokemon] = useState<Pokemon | null>(null);
+  const [editTrainer, setEditTrainer] = useState('');
+
   const handleCreate = () => {
     createPokemon.mutate(newPokemon, {
       onSuccess: () => {
-        onClose();
+        onCreateClose();
         setNewPokemon({ tipo: 'pikachu', treinador: '' });
       },
     });
+  };
+
+  const handleEditClick = (pokemon: Pokemon) => {
+    setEditingPokemon(pokemon);
+    setEditTrainer(pokemon.treinador);
+    onEditOpen();
+  };
+
+  const handleUpdate = () => {
+    if (!editingPokemon) return;
+
+    updatePokemon.mutate(
+      {
+        id: editingPokemon.id,
+        data: { treinador: editTrainer },
+      },
+      {
+        onSuccess: () => {
+          onEditClose();
+          setEditingPokemon(null);
+          setEditTrainer('');
+        },
+      }
+    );
   };
 
   if (isLoading) {
@@ -80,7 +111,7 @@ export const PokemonListPage = () => {
       <HStack justify="space-between" mb={8}>
         <Heading>Meus Pokémons</Heading>
         <HStack>
-          <Button onClick={onOpen} colorScheme="green">
+          <Button onClick={onCreateOpen} colorScheme="green">
             Novo Pokémon
           </Button>
           <Button onClick={() => navigate('/')}>Voltar</Button>
@@ -102,21 +133,33 @@ export const PokemonListPage = () => {
                 <Heading size="md">{getPokemonName(pokemon.tipo)}</Heading>
                 <Text>Treinador: {pokemon.treinador}</Text>
                 <Text>Nível: {pokemon.nivel}</Text>
-                <Button
-                  size="sm"
-                  colorScheme="red"
-                  onClick={() => deletePokemon.mutate(pokemon.id)}
-                  isLoading={deletePokemon.isPending}
-                >
-                  Deletar
-                </Button>
+                <HStack spacing={2} width="100%">
+                  <Button
+                    size="sm"
+                    colorScheme="blue"
+                    onClick={() => handleEditClick(pokemon)}
+                    flex={1}
+                  >
+                    Editar
+                  </Button>
+                  <Button
+                    size="sm"
+                    colorScheme="red"
+                    onClick={() => deletePokemon.mutate(pokemon.id)}
+                    isLoading={deletePokemon.isPending}
+                    flex={1}
+                  >
+                    Deletar
+                  </Button>
+                </HStack>
               </VStack>
             </CardBody>
           </Card>
         ))}
       </SimpleGrid>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      {/* Modal de Criação */}
+      <Modal isOpen={isCreateOpen} onClose={onCreateClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Criar Novo Pokémon</ModalHeader>
@@ -154,7 +197,7 @@ export const PokemonListPage = () => {
           </ModalBody>
 
           <ModalFooter>
-            <Button variant="ghost" mr={3} onClick={onClose}>
+            <Button variant="ghost" mr={3} onClick={onCreateClose}>
               Cancelar
             </Button>
             <Button
@@ -164,6 +207,62 @@ export const PokemonListPage = () => {
               isDisabled={!newPokemon.treinador}
             >
               Criar
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      {/* Modal de Edição */}
+      <Modal isOpen={isEditOpen} onClose={onEditClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Editar Pokémon</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <VStack spacing={4}>
+              <FormControl isReadOnly>
+                <FormLabel>Pokémon</FormLabel>
+                <Input
+                  value={editingPokemon ? getPokemonName(editingPokemon.tipo) : ''}
+                  isReadOnly
+                  bg="gray.100"
+                  _dark={{ bg: 'gray.700' }}
+                />
+              </FormControl>
+
+              <FormControl isReadOnly>
+                <FormLabel>Nível</FormLabel>
+                <Input
+                  value={editingPokemon?.nivel || ''}
+                  isReadOnly
+                  bg="gray.100"
+                  _dark={{ bg: 'gray.700' }}
+                />
+              </FormControl>
+
+              <FormControl isRequired>
+                <FormLabel>Treinador</FormLabel>
+                <Input
+                  value={editTrainer}
+                  onChange={(e) => setEditTrainer(e.target.value)}
+                  placeholder="Nome do treinador"
+                  autoFocus
+                />
+              </FormControl>
+            </VStack>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button variant="ghost" mr={3} onClick={onEditClose}>
+              Cancelar
+            </Button>
+            <Button
+              colorScheme="blue"
+              onClick={handleUpdate}
+              isLoading={updatePokemon.isPending}
+              isDisabled={!editTrainer || editTrainer === editingPokemon?.treinador}
+            >
+              Salvar
             </Button>
           </ModalFooter>
         </ModalContent>

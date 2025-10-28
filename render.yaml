@@ -1,16 +1,6 @@
 # =========================================
 # 🎮 PokéArena Frontend - Render Deploy Config
 # =========================================
-#
-# Este arquivo configura automaticamente o deploy do frontend React + Vite
-# na Render como um Static Site (arquivos estáticos servidos via CDN).
-#
-# Como usar:
-#   1. Faça commit deste arquivo: git add render.yaml && git commit -m "Add Render config"
-#   2. Push para o GitHub: git push origin main
-#   3. Na Render: Dashboard → New → Blueprint → Conectar repositório
-#   4. Render detecta o render.yaml automaticamente e cria tudo com um clique!
-#
 # Documentação: https://render.com/docs/static-sites
 # =========================================
 
@@ -19,7 +9,7 @@ services:
   # 🌐 Static Site (Frontend SPA)
   # =========================================
   - type: web
-    name: poke-arena-front
+    name: poke-arena
     env: static  # Static Site - serve apenas arquivos estáticos via CDN global
 
     # Branch principal para auto-deploy
@@ -30,8 +20,6 @@ services:
     # =========================================
 
     # Build Command: instala dependências e compila o projeto
-    # npm ci: instalação limpa e determinística (mais confiável que npm install)
-    # npm run build: executa "tsc -b && vite build" do package.json
     buildCommand: npm ci && npm run build
 
     # Publish Directory: pasta onde ficam os arquivos buildados
@@ -44,8 +32,6 @@ services:
     # =========================================
     # 🔧 Variáveis de Ambiente
     # =========================================
-    # IMPORTANTE: Variáveis do Vite DEVEM começar com "VITE_"
-    # Elas são injetadas em BUILD TIME (não runtime)
 
     envVars:
       # URL da API Backend (conecta ao serviço poke-arena-back)
@@ -63,126 +49,7 @@ services:
       # Node.js version para o processo de build
       - key: NODE_VERSION
         value: 20
-
-    # =========================================
-    # 🛣️ Routes - SPA Routing Support
-    # =========================================
-    # IMPORTANTE: Routes e Headers devem ser configurados manualmente
-    # no dashboard da Render após o primeiro deploy, pois o Blueprint
-    # tem limitações para Static Sites.
-    #
-    # Configure no Dashboard:
-    # 1. Settings → Redirects/Rewrites
-    #    Source: /*
-    #    Destination: /index.html
-    #    Action: Rewrite
-    #
-    # 2. Settings → Headers
-    #    Adicione os headers de segurança conforme necessário
-
-    # Configuração de routes (se suportado pelo Blueprint)
-    # routes:
-    #   - type: rewrite
-    #     source: /*
-    #     destination: /index.html
-
-    # Configuração de headers (comentado - configure no dashboard)
-    # Headers devem ser configurados manualmente no dashboard após o deploy
-    #
-    # Exemplos de headers recomendados:
-    # - X-Frame-Options: DENY
-    # - X-Content-Type-Options: nosniff
-    # - X-XSS-Protection: 1; mode=block
-    # - Referrer-Policy: strict-origin-when-cross-origin
-    # - Cache-Control para /assets/*: public, max-age=31536000, immutable
-    # - Cache-Control para /index.html: no-cache, no-store, must-revalidate
-
 # =========================================
-# 📝 Notas Importantes
-# =========================================
-#
-# 1. STATIC SITE vs WEB SERVICE:
-#    - Static Site: arquivos estáticos servidos via CDN (seu caso)
-#    - Web Service: aplicações Node.js/SSR (Next.js, Express, etc)
-#    - Static Site é GRATUITO na Render (até 100GB bandwidth/mês)
-#
-# 2. VARIÁVEIS VITE (Build Time):
-#    - Variáveis VITE_* são injetadas durante o BUILD
-#    - Não podem ser mudadas depois do build (diferente de runtime vars)
-#    - Se mudar VITE_API_URL, precisa fazer novo deploy (rebuild)
-#    - Acesse no código: import.meta.env.VITE_API_URL
-#
-# 3. CORS NO BACKEND:
-#    - O backend DEVE permitir requisições do frontend
-#    - Adicione no main.ts do NestJS:
-#      app.enableCors({
-#        origin: [
-#          'http://localhost:5173', // dev local
-#          'https://poke-arena-front.onrender.com', // produção
-#        ],
-#        credentials: true,
-#      });
-#
-# 4. SPA ROUTING:
-#    - A regra "/* → /index.html" garante que o React Router funcione
-#    - Sem ela: acessar /battle diretamente → 404
-#    - Com ela: acessar /battle → index.html → React Router carrega a rota
-#
-# 5. CUSTOM DOMAIN:
-#    - Por padrão: poke-arena-front.onrender.com
-#    - Para domínio próprio: Dashboard → Settings → Custom Domain
-#    - Adicione um CNAME record no seu DNS apontando para Render
-#
-# 6. HTTPS/SSL:
-#    - Render fornece HTTPS automático e gratuito
-#    - Certificado Let's Encrypt renovado automaticamente
-#    - Nenhuma configuração necessária
-#
-# 7. BUILD FAILURES (troubleshooting):
-#    - Erro "command not found": verifique buildCommand
-#    - Erro "cannot find module": verifique se está usando "npm ci"
-#    - Build muito lento: considere usar pnpm ao invés de npm
-#    - Erro de TypeScript: rode "npm run build" localmente primeiro
-#
-# 8. PERFORMANCE:
-#    - CDN global: baixa latência mundial
-#    - Assets com hash: cache infinito seguro
-#    - Brotli compression: ~20% menor que gzip
-#    - Static Site é extremamente rápido (sem processamento server-side)
-#
-# 9. CUSTO:
-#    - Static Sites: GRATUITO na Render
-#    - Bandwidth: 100GB/mês incluído
-#    - Sem limites de build minutes
-#    - Deploy ilimitado
-#
-# 10. DEPLOY FLOW:
-#     1. git push origin main
-#        ↓
-#     2. Render detecta mudança
-#        ↓
-#     3. Build:
-#        - npm ci (instala deps)
-#        - npm run build (compila TS + Vite)
-#        - gera pasta dist/
-#        ↓
-#     4. Deploy:
-#        - publica arquivos de dist/ no CDN
-#        - aplica routes e headers
-#        ↓
-#     5. Live! 🎉
-#        - https://poke-arena-front.onrender.com
-#
-# =========================================
-# 🔗 URLs Importantes
-# =========================================
-#
-# Frontend (após deploy):
-#   https://poke-arena-front.onrender.com
-#
-# Backend (já configurado):
-#   https://poke-arena-back.onrender.com
-#
 # Documentação Render:
 #   - Static Sites: https://render.com/docs/static-sites
 #   - Blueprint Spec: https://render.com/docs/blueprint-spec

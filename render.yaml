@@ -21,7 +21,6 @@ services:
   - type: web
     name: poke-arena-front
     env: static  # Static Site - serve apenas arquivos estáticos via CDN global
-    region: oregon  # us-west (mais barato) - alternativas: ohio (us-east), frankfurt (eu-central)
 
     # Branch principal para auto-deploy
     branch: main
